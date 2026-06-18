@@ -97,7 +97,8 @@ func (i *fileItem) buildMenu(u fyne.URI) *fyne.Menu {
 		openWithItem.Disabled = true
 	}
 
-	return fyne.NewMenu(u.Name(),
+	return fyne.NewMenu(
+		u.Name(),
 		openItem, openWithItem,
 		fyne.NewMenuItem("Copy path", func() {
 			i.parent.win.Clipboard().SetContent(u.Path())

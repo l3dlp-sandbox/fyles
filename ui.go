@@ -194,7 +194,7 @@ func (ui *fylesUI) makeToolbar() *fyne.Container {
 			}
 
 			newFolderPath := filepath.Join(ui.pwd.Path(), newFolderEntry.Text)
-			createFolderErr := os.MkdirAll(newFolderPath, 0750)
+			createFolderErr := os.MkdirAll(newFolderPath, 0o750)
 			if createFolderErr != nil {
 				fyne.LogError(
 					fmt.Sprintf("Failed to create folder with path %s", newFolderPath),
@@ -216,7 +216,8 @@ func (ui *fylesUI) makeToolbar() *fyne.Container {
 			h := storage.NewFileURI(home)
 			ui.setDirectory(h)
 			ui.fileTree.Select(h.String())
-		})), newFolderButton,
+		}),
+	), newFolderButton,
 		container.NewHScroll(l))
 }
 
@@ -236,8 +237,7 @@ func mapIcon(files *xWidget.FileTree, uid string, icon fyne.Resource) {
 	files.MapURI(uid, mapping)
 }
 
-type favRepo struct {
-}
+type favRepo struct{}
 
 func (f *favRepo) Exists(fyne.URI) (bool, error) {
 	return true, nil

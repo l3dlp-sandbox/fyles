@@ -24,7 +24,8 @@ func (d *dirTapPanel) TappedSecondary(ev *fyne.PointEvent) {
 }
 
 func (d *dirTapPanel) buildMenu(u fyne.URI) *fyne.Menu {
-	return fyne.NewMenu(u.Name(),
+	return fyne.NewMenu(
+		u.Name(),
 		fyne.NewMenuItem("Copy folder path", func() {
 			d.parent.win.Clipboard().SetContent(u.Path())
 		}),

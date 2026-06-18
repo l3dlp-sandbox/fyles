@@ -42,7 +42,8 @@ func NewFylesPanel(c func(fyne.URI), w fyne.Window) *Panel {
 		func(id widget.GridWrapItemID, obj fyne.CanvasObject) {
 			icon := obj.(*fileItem)
 			icon.setData(p.items[id])
-		})
+		},
+	)
 	p.content.OnSelected = func(id widget.GridWrapItemID) {
 		p.selected = id
 		p.cb(p.items[id].location)

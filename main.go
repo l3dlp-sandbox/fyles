@@ -30,7 +30,8 @@ func main() {
 		panels = append(panels,
 			container.NewStack(
 				canvas.NewRectangle(theme.BackgroundColor()),
-				item))
+				item,
+			))
 	}
 	path, _ := os.Getwd()
 	for i := 1; i < len(os.Args); i++ {
