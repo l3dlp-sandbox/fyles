@@ -1,7 +1,11 @@
 [Details]
-  Icon = "Icon.png"
-  Name = "Fyles"
-  ID = "com.fyshos.fyles"
+Icon = "Icon.png"
+Name = "Fyles"
+ID = "com.fyshos.fyles"
+Build = 1
 
- [Migrations]
-  fyneDo = true
+[LinuxAndBSD]
+Categories = ["Utility"]
+
+[Migrations]
+fyneDo = true

@@ -1,5 +1,4 @@
-./fyles
-./fyles.app
-./fyles.exe
+/fyles*
+/Fyles*
 
 .idea/
