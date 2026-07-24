@@ -19,6 +19,11 @@ type fylesUI struct {
 	filePath   *widget.Label
 
 	filter storage.FileFilter
+
+	// the directory tree presents the home directory under a root of its own,
+	// so file URIs must be mapped before they can address a node - see treeID
+	homeDir  string
+	homeRoot string
 }
 
 type filter struct{}

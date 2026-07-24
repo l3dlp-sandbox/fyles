@@ -22,13 +22,25 @@ import (
 	xWidget "fyne.io/x/fyne/widget"
 )
 
+// treeID maps a URI to the identifier that addresses it in the directory tree.
+// Locations inside the home directory appear under a root of their own, so a
+// file URI would not match any node.
+func (ui *fylesUI) treeID(u fyne.URI) widget.TreeNodeID {
+	path := u.Path()
+	if ui.homeRoot != "" && (path == ui.homeDir || strings.HasPrefix(path, ui.homeDir+"/")) {
+		return ui.homeRoot + strings.TrimPrefix(path, ui.homeDir)
+	}
+
+	id := u.String()
+	if id[len(id)-1] == '/' && id != "file:///" {
+		id = id[:len(id)-1]
+	}
+	return id
+}
+
 func (ui *fylesUI) setDirectory(u fyne.URI) {
 	ui.pwd = u
-	dirStr := u.String()
-	if dirStr[len(dirStr)-1] == '/' && dirStr != "file:///" {
-		dirStr = dirStr[:len(dirStr)-1]
-	}
-	ui.fileTree.Select(dirStr)
+	ui.fileTree.Select(ui.treeID(u))
 	ui.items.SetDir(u)
 	ui.fileScroll.ScrollToTop()
 	ui.filePath.SetText(u.Path())
@@ -82,6 +94,7 @@ func (ui *fylesUI) makeFilesPanel(u fyne.URI) *xWidget.FileTree {
 		homeRoot = rootID + "Home"
 		base = []string{base[0], homeRoot, base[1]}
 	}
+	ui.homeDir, ui.homeRoot = homeDir, homeRoot
 	faves := []string{
 		favID + "/Documents",
 		favID + "/Downloads",
@@ -151,10 +164,7 @@ func (ui *fylesUI) makeFilesPanel(u fyne.URI) *xWidget.FileTree {
 		ui.setDirectory(u)
 	}
 
-	open := u
-	if strings.HasPrefix(u.Path(), homeDir) {
-		open, _ = storage.ParseURI("tree:///Home" + strings.TrimPrefix(u.Path(), homeDir))
-	}
+	open, _ := storage.ParseURI(ui.treeID(u))
 	openParent(files, open)
 	return files
 }
@@ -213,9 +223,7 @@ func (ui *fylesUI) makeToolbar() *fyne.Container {
 			if err != nil {
 				return
 			}
-			h := storage.NewFileURI(home)
-			ui.setDirectory(h)
-			ui.fileTree.Select(h.String())
+			ui.setDirectory(storage.NewFileURI(home))
 		}),
 	), newFolderButton,
 		container.NewHScroll(l))
